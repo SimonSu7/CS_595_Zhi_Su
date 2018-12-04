@@ -1,7 +1,7 @@
 #include <petscksp.h>
 int main(int argc, char **args) {
     Vec            x,b,u;
-    PetscReal      norm;
+    PetscReal      norm,,tol=1000.*PETSC_MACHINE_EPSILON;
     PetscScalar    one=1.0,negone=-1.0,matvalue[3];
     KSP            ksp;
     PC             pc;
@@ -64,10 +64,13 @@ int main(int argc, char **args) {
     KSPView(ksp,PETSC_VIEWER_STDOUT_WORLD);
     //check ||AX-b||
     MatMult(A,x,u);
-    VecAXPY(u,negone,b);
-    VecNorm(u,NORM_2,&norm);
+    VecAXPY(x,negone,u);
+    VecNorm(x,NORM_2,&norm);
     KSPGetIterationNumber(ksp,&its);
-    PetscPrintf(PETSC_COMM_WORLD,"Norm of error %g, Iterations %D\n",norm,its);
+    if(norm>tol){
+    PetscPrintf(PETSC_COMM_WORLD,"residual is %g, Iterations %D\n",norm,its);
+   }
+
     VecDestroy(&x);
     VecDestroy(&b);
     VecDestroy(&u);
