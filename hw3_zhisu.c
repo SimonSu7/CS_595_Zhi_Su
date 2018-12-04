@@ -1,7 +1,7 @@
 #include <petscksp.h>
 int main(int argc, char **args) {
     Vec            x,b,u;
-    PetscReal      norm,,tol=1000.*PETSC_MACHINE_EPSILON;
+    PetscReal      norm,tol=1000.*PETSC_MACHINE_EPSILON;
     PetscScalar    one=1.0,negone=-1.0,matvalue[3];
     KSP            ksp;
     PC             pc;
